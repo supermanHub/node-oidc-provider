@@ -65,7 +65,7 @@ module.exports.provider = Object.assign({
       .digest('hex');
   },
   interactionUrl: function interactionUrl(ctx, interaction) { // eslint-disable-line no-unused-vars
-    return `/interaction/${ctx.oidc.uuid}`;
+    return `/a/consumer/api/oidc/interaction/${ctx.oidc.uuid}`;
   },
   clientCacheDuration: 1 * 24 * 60 * 60, // 1 day in seconds,
   ttl: {

@@ -1,6 +1,7 @@
 const querystring = require('querystring');
 
 const { urlencoded } = require('express'); // eslint-disable-line import/no-unresolved
+const rewrite = require('express-urlrewrite');
 
 const Account = require('../support/account');
 
@@ -8,6 +9,8 @@ const body = urlencoded({ extended: false });
 
 module.exports = (app, provider) => {
   const { constructor: { errors: { SessionNotFound } } } = provider;
+
+  app.use(rewrite('/.well-known/openid-configuration', '/a/consumer/api/oidc/.well-known/openid-configuration'));
 
   app.use((req, res, next) => {
     const orig = res.render;
@@ -30,7 +33,7 @@ module.exports = (app, provider) => {
     next();
   }
 
-  app.get('/interaction/:grant', setNoCache, async (req, res, next) => {
+  app.get('/a/consumer/api/oidc/interaction/:grant', setNoCache, async (req, res, next) => {
     try {
       const details = await provider.interactionDetails(req);
       const client = await provider.Client.find(details.params.client_id);
@@ -64,7 +67,7 @@ module.exports = (app, provider) => {
     }
   });
 
-  app.post('/interaction/:grant/confirm', setNoCache, body, async (req, res, next) => {
+  app.post('/a/consumer/api/oidc/interaction/:grant/confirm', setNoCache, body, async (req, res, next) => {
     try {
       const result = { consent: {} };
       await provider.interactionFinished(req, res, result);
@@ -73,7 +76,7 @@ module.exports = (app, provider) => {
     }
   });
 
-  app.post('/interaction/:grant/login', setNoCache, body, async (req, res, next) => {
+  app.post('/a/consumer/api/oidc/interaction/:grant/login', setNoCache, body, async (req, res, next) => {
     try {
       const account = await Account.findByLogin(req.body.login);
 

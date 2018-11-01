@@ -43,6 +43,8 @@
     "debug": "^4.1.0",
     "delegates": "^1.0.0",
     "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "express-urlrewrite": "^1.2.0",
     "got": "^9.2.2",
     "jsesc": "^2.5.1",
     "koa": "^2.6.1",
